@@ -50,6 +50,13 @@ try {
         );
     }
 
+    // check if "processed" folder already exists. If not, the system will try to create it
+    if (!file_exists($infinity->processedFolder)) {
+        if (!mkdir($infinity->processedFolder)) {
+            $infinity->killProcess(103, "Directory " . PROCESSED_FOLDER . " cannot be created");
+        }
+    }
+
     // Initial checks
     if (!is_writable($infinity->currentDir)) {
         $infinity->killProcess(100, "Permission denied on " . dirname(__FILE__));
@@ -59,13 +66,6 @@ try {
     }
     if (!is_writable($infinity->processedFolder)) {
         $infinity->killProcess(102, "Permission denied on " . $infinity->processedFolder);
-    }
-
-    // check if "processed" folder already exists. If not, the system will try to create it
-    if (!file_exists($infinity->processedFolder)) {
-        if (!mkdir($infinity->processedFolder)) {
-            $infinity->killProcess(103, "Directory " . PROCESSED_FOLDER . " cannot be created");
-        }
     }
 
     $mysqli = new mysqli(MYSQLI_HOST, MYSQLI_USERNAME, MYSQLI_PASSWORD, MYSQLI_DBNAME);
